@@ -399,8 +399,16 @@ class TplinkDecoApi:
         data: Any,
     ) -> dict:
         headers = {CONTENT_TYPE: "application/json"}
+        # Gebruik een dictionary voor cookies in plaats van een string in headers
+        request_cookies = {}
         if self._cookie is not None:
-            headers[COOKIE] = self._cookie
+            try:
+                # Split 'sysauth=abc' naar {'sysauth': 'abc'}
+                cookie_parts = self._cookie.split("=", 1)
+                if len(cookie_parts) == 2:
+                    request_cookies[cookie_parts[0]] = cookie_parts[1]
+            except Exception:
+                _LOGGER.warning("Could not parse cookie: %s", self._cookie)
         try:
             async with async_timeout.timeout(self._timeout_seconds):
                 response = await self._session.post(
@@ -408,22 +416,23 @@ class TplinkDecoApi:
                     params=params,
                     data=data,
                     headers=headers,
+                    cookies=request_cookies, # Gebruik de cookies parameter
                     ssl=self._ssl_context,
                 )
                 response.raise_for_status()
 
-                cookie = response.headers.get(SET_COOKIE)
-                if cookie is not None:
-                    match = re.search(r"(sysauth=[a-f0-9]+)", cookie)
+                # Verbeterde extractie: loop door alle Set-Cookie headers
+                for cookie_header in response.headers.getall(SET_COOKIE, []):
+                    match = re.search(r"(sysauth=[a-f0-9]+)", cookie_header)
                     if match:
                         self._cookie = match.group(1)
-                        _LOGGER.debug("cookie=%s", self._cookie)
+                        _LOGGER.debug("Found new cookie: %s", self._cookie)
+                        break
 
-                # Sometimes server responses with incorrect content type, so disable the check
+                # Soms antwoordt de server met de verkeerde content-type
                 response_json = await response.json(content_type=None)
                 if "error_code" in response_json:
                     error_code = response_json.get("error_code")
-
                     if error_code != 0 and error_code != "":
                         _LOGGER.debug(
                             "%s error_code=%s, response_json=%s",
