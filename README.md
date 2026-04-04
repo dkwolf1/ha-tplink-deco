@@ -1,3 +1,18 @@
+# TP-Link Deco (Community Fix)
+
+⚠️ This fork contains a fix for Home Assistant 2026.4 compatibility.
+
+The original repository is in maintenance mode and no longer actively tested.
+This fork restores functionality for newer Home Assistant versions.
+
+## Status
+
+- ✅ Works on Home Assistant 2026.4.x
+- ✅ Integration loads correctly
+- ✅ Device updates working
+
+👉 Use this fork if the original integration no longer works.
+
 # TP-Link Deco
 
 [![GitHub Release][releases-shield]][releases]
