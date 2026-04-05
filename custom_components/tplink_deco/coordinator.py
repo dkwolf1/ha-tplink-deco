@@ -72,6 +72,8 @@ class TpLinkDeco:
         self.bssid_band5 = None
         self.signal_band2_4 = None
         self.signal_band5 = None
+        self.backhaul_speed = None
+        self.backhaul_max_speed = None
 
     def update(
         self,
@@ -100,6 +102,8 @@ class TpLinkDeco:
         signal_level = data.get("signal_level", {})
         self.signal_band2_4 = signal_level.get("band2_4")
         self.signal_band5 = signal_level.get("band5")
+        self.backhaul_speed = data.get("backhual_speed")
+        self.backhaul_max_speed = data.get("backhual_max_speed")
 
 
 class TpLinkDecoClient:
