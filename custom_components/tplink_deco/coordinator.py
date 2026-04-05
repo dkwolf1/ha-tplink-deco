@@ -75,7 +75,7 @@ class TpLinkDeco:
 
     def update(
         self,
-        data: dict[str:Any],
+        data: dict[str, Any],
     ) -> None:
         self.hw_version = data.get("hardware_ver")
         self.sw_version = data.get("software_ver")
@@ -86,7 +86,13 @@ class TpLinkDeco:
             self.name = snake_case_to_title_space(data.get("nickname"))
         self.ip_address = filter_invalid_ip(data.get("device_ip"))
         self.online = data.get("group_status") == "connected"
-        self.internet_online = data.get("inet_status") == "online"
+        inet = data.get("inet_status")
+        if inet is None:
+            self.internet_online = None
+        elif isinstance(inet, str):
+            self.internet_online = inet.lower() in ("online", "connected", "up")
+        else:
+            self.internet_online = bool(inet)    
         self.master = data.get("role") == "master"
         self.connection_type = data.get("connection_type")
         self.bssid_band2_4 = data.get("bssid_2g")
