@@ -2,6 +2,7 @@
 
 import logging
 from dataclasses import dataclass
+from typing import Any
 from typing import Callable
 
 from homeassistant.components.sensor import SensorEntity
@@ -33,7 +34,7 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 class TplinkDecoDiagnosticSensorDescription(SensorEntityDescription):
     """Description of a TP-Link Deco diagnostic sensor."""
 
-    value_fn: Callable[[TpLinkDeco], str | None]
+    value_fn: Callable[[TpLinkDeco], Any]
 
 
 DIAGNOSTIC_SENSOR_DESCRIPTIONS: tuple[TplinkDecoDiagnosticSensorDescription, ...] = (
@@ -67,11 +68,27 @@ DIAGNOSTIC_SENSOR_DESCRIPTIONS: tuple[TplinkDecoDiagnosticSensorDescription, ...
             deco.connection_type[0]
             if isinstance(deco.connection_type, list) and deco.connection_type
             else deco.connection_type
-        ),
+        ),    
     ),
-)
-
-
+    TplinkDecoDiagnosticSensorDescription(
+        key="backhaul_speed",
+        name="Backhaul speed",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement=UnitOfDataRate.MEGABITS_PER_SECOND,
+        value_fn=lambda deco: deco.backhaul_speed,
+    ),
+    TplinkDecoDiagnosticSensorDescription(
+        key="backhaul_max_speed",
+        name="Backhaul max speed",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement=UnitOfDataRate.MEGABITS_PER_SECOND,
+        value_fn=lambda deco: deco.backhaul_max_speed,
+    ),
+)   
+    
+        
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities
 ):
@@ -280,6 +297,9 @@ class TplinkDecoDiagnosticSensor(CoordinatorEntity, SensorEntity):
         return create_device_info(self._deco, self.coordinator.data.master_deco)
 
     @property
-    def native_value(self) -> str | None:
+    def native_value(self):
         value = self.entity_description.value_fn(self._deco)
-        return value if value else None
+        if value is None or value == "" or value == []:
+            return None
+        return value    
+        
