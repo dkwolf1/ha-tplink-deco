@@ -1,17 +1,33 @@
 # TP-Link Deco (Community Fix)
 
-⚠️ This fork contains a fix for Home Assistant 2026.4 compatibility.
+⚠️ This fork restores and extends compatibility with newer Home Assistant versions.
 
 The original repository is in maintenance mode and no longer actively tested.
-This fork restores functionality for newer Home Assistant versions.
+This fork fixes compatibility issues and adds additional functionality.
 
-## Status
+## Added / Fixed in this fork
 
-- ✅ Works on Home Assistant 2026.4.x
-- ✅ Integration loads correctly
-- ✅ Device updates working
+- ✅ Fix for Home Assistant 2026.4 compatibility
+- ✅ Diagnostic entities (including backhaul and max speed)
+- ✅ Polling control:
+  - pause/resume services
+  - switch entity to control polling from UI
+- ✅ Improved stability when accessing the Deco web interface
 
-👉 Use this fork if the original integration no longer works.
+👉 Use this fork if the original integration no longer works or if you need extended diagnostics and control.
+
+## Services/switch
+Actions/services in home assistant:
+
+service: tplink_deco.pause_polling
+service: tplink_deco.resume_polling
+switch.deco_polling
+
+#### Polling Control
+
+Pause or resume polling to the Deco API.
+
+This can be useful when accessing the Deco web interface, since the API allows limited concurrent sessions.
 
 # TP-Link Deco
 
