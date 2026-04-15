@@ -13,7 +13,7 @@
 
 ---
 
-## 🚀 Overview 2026/5
+## 🚀 Overview 2026
 
 This integration provides local polling control and diagnostics for TP-Link Deco systems within Home Assistant.
 
@@ -82,7 +82,7 @@ Available services:
 
 - `tplink_deco.pause_polling`
 - `tplink_deco.resume_polling`
-
+- `tplink_deco.reboot_polling`
 ---
 
 ## 🔌 Entities
