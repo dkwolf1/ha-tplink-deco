@@ -259,9 +259,20 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry):
 async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Handle removal of an entry."""
     _LOGGER.debug("async_unload_entry: Config entry %s", config_entry.entry_id)
-    data = hass.data[DOMAIN][config_entry.entry_id]
+
+    domain_data = hass.data.get(DOMAIN, {})
+    data = domain_data.get(config_entry.entry_id)
+
+    if data is None:
+        _LOGGER.debug(
+            "async_unload_entry: No stored data for config entry %s",
+            config_entry.entry_id,
+        )
+        return True
+
     deco_coordinator = data.get(COORDINATOR_DECOS_KEY)
     clients_coordinator = data.get(COORDINATOR_CLIENTS_KEY)
+
     if deco_coordinator is not None:
         await deco_coordinator.async_close()
     if clients_coordinator is not None:
@@ -275,24 +286,19 @@ async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> 
             ]
         )
     )
+
     if unloaded:
-        hass.data[DOMAIN].pop(config_entry.entry_id)
+        hass.data[DOMAIN].pop(config_entry.entry_id, None)
         hass.services.async_remove(DOMAIN, SERVICE_PAUSE_POLLING)
         hass.services.async_remove(DOMAIN, SERVICE_RESUME_POLLING)
+
     return unloaded
-
-
-async def async_reload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> None:
-    """Reload config entry."""
-    _LOGGER.debug("async_reload_entry: Config entry %s", config_entry)
-    await async_unload_entry(hass, config_entry)
-    await async_setup_entry(hass, config_entry)
 
 
 async def update_listener(hass: HomeAssistant, config_entry: ConfigEntry) -> None:
     """Update options."""
     _LOGGER.debug("update_listener: Reloading %s", config_entry.entry_id)
-    await async_reload_entry(hass, config_entry)
+    await hass.config_entries.async_reload(config_entry.entry_id)
 
 
 async def async_migrate_entry(hass, config_entry: ConfigEntry):

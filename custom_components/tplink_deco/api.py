@@ -212,6 +212,27 @@ class TplinkDecoApi:
         check_data_error_code(context, data)
         _LOGGER.debug("Rebooted decos %s", deco_macs)
 
+    # Return performance data (CPU / memory)
+    async def async_get_performance(self) -> dict:
+        return await self._async_call_with_retry(self._async_get_performance)
+
+    async def _async_get_performance(self) -> dict:
+        await self.async_login_if_needed()
+
+        context = "Get Performance"
+        performance_payload = {"operation": "read"}
+
+        response_json = await self._async_post(
+            context,
+            f"{self._host}/cgi-bin/luci/;stok={self._stok}/admin/network",
+            params={"form": "performance"},
+            data=self._encode_payload(performance_payload),
+        )
+
+        data = self._decrypt_data(context, response_json["data"])
+        check_data_error_code(context, data)
+        return data
+
     # Return list of clients. Default lists clients for all decos.
     async def async_list_clients(self, deco_mac="default") -> dict:
         return await self._async_call_with_retry(self._async_list_clients, deco_mac)

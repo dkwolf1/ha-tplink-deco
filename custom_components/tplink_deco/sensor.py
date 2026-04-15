@@ -86,6 +86,42 @@ DIAGNOSTIC_SENSOR_DESCRIPTIONS: tuple[TplinkDecoDiagnosticSensorDescription, ...
         native_unit_of_measurement=UnitOfDataRate.MEGABITS_PER_SECOND,
         value_fn=lambda deco: deco.backhaul_max_speed,
     ),
+    TplinkDecoDiagnosticSensorDescription(
+        key="cpu_usage",
+        name="CPU usage",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="%",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda deco: deco.cpu_usage,
+    ),
+    TplinkDecoDiagnosticSensorDescription(
+        key="cpu_usage_raw",
+        name="CPU usage raw",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="%",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda deco: deco.cpu_usage_raw,
+    ),
+    TplinkDecoDiagnosticSensorDescription(
+        key="mem_usage",
+        name="Memory usage",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="%",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda deco: deco.mem_usage,
+    ),
+    TplinkDecoDiagnosticSensorDescription(
+        key="mem_usage_raw",
+        name="Memory usage raw",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement="%",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda deco: deco.mem_usage_raw,
+    ),
 )
 
 

@@ -53,4 +53,4 @@ SERVICE_REBOOT_DECO = "reboot_deco"
 SERVICE_PAUSE_POLLING = "pause_polling"
 SERVICE_RESUME_POLLING = "resume_polling"
 # Platforms
-PLATFORMS = ["device_tracker", "sensor", "binary_sensor", "switch"]
+PLATFORMS = ["device_tracker", "sensor", "binary_sensor", "switch", "select"]
