@@ -74,6 +74,10 @@ class TpLinkDeco:
         self.signal_band5 = None
         self.backhaul_speed = None
         self.backhaul_max_speed = None
+        self.cpu_usage = None
+        self.cpu_usage_raw = None
+        self.mem_usage = None
+        self.mem_usage_raw = None
 
     def update(
         self,
@@ -187,6 +191,10 @@ class TplinkDecoUpdateCoordinator(DataUpdateCoordinator):
             self.api.async_list_devices
         )
 
+        performance_data = await async_call_and_propagate_config_error(
+            self.api.async_get_performance
+        )
+
         old_decos = self.data.decos
         master_deco = None
         deco_added = False
@@ -202,6 +210,34 @@ class TplinkDecoUpdateCoordinator(DataUpdateCoordinator):
             decos[mac] = deco
             if deco.master:
                 master_deco = deco
+
+        # Zet globale performance data op de master Deco
+        result = performance_data.get("result", {})
+        if master_deco is not None:
+            cpu_raw = result.get("cpu_usage")
+            mem_raw = result.get("mem_usage")
+
+            if cpu_raw is not None:
+                cpu_percent = cpu_raw * 100
+                master_deco.cpu_usage_raw = round(cpu_percent, 1)
+
+                if master_deco.cpu_usage is not None:
+                    master_deco.cpu_usage = round(
+                        (master_deco.cpu_usage * 0.7) + (cpu_percent * 0.3), 1
+                    )
+                else:
+                    master_deco.cpu_usage = round(cpu_percent, 1)
+
+            if mem_raw is not None:
+                mem_percent = mem_raw * 100
+                master_deco.mem_usage_raw = round(mem_percent, 1)
+
+                if master_deco.mem_usage is not None:
+                    master_deco.mem_usage = round(
+                        (master_deco.mem_usage * 0.7) + (mem_percent * 0.3), 1
+                    )
+                else:
+                    master_deco.mem_usage = round(mem_percent, 1)
 
         if deco_added:
             async_dispatcher_send(self.hass, SIGNAL_DECO_ADDED)
