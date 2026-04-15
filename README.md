@@ -13,7 +13,7 @@
 
 ---
 
-## 🚀 Overview
+## 🚀 Overview 2026/5
 
 This integration provides local polling control and diagnostics for TP-Link Deco systems within Home Assistant.
 
@@ -121,12 +121,6 @@ Polling control:
 
 [![Community Forum][forum-shield]][forum]
 
-> [!CAUTION]
-> This integration is in MAINTENANCE MODE.
->
-> I no longer have a deco unit so I cannot test this integration properly. I will not implement any new feature requests and will only implement simple fixes required by Home Assistant.
->
-> If anybody is interested in taking over this repo and maintaining it, please let me know.
 
 ## Functionality
 
