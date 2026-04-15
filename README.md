@@ -1,111 +1,75 @@
-# TP-Link Deco
+# TP-Link Deco (Community Fix)
 
-[![GitHub Release](https://img.shields.io/github/v/release/amosyuen/ha-tplink-deco?style=for-the-badge)](https://github.com/amosyuen/ha-tplink-deco/releases)
-[![GitHub Activity](https://img.shields.io/github/commit-activity/y/amosyuen/ha-tplink-deco?style=for-the-badge)](https://github.com/amosyuen/ha-tplink-deco/commits/main)
-[![License](https://img.shields.io/github/license/amosyuen/ha-tplink-deco?style=for-the-badge)](LICENSE)
+⚠️ This fork restores and extends compatibility with newer Home Assistant versions.
 
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?style=for-the-badge)](https://github.com/pre-commit/pre-commit)
-[![Black](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)](https://github.com/psf/black)
-[![HACS](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://hacs.xyz)
-
-[![Maintained](https://img.shields.io/badge/maintained-yes-brightgreen?style=for-the-badge)]()
-[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2026.4%2B-blue?style=for-the-badge)](https://www.home-assistant.io/)
+The original repository is in maintenance mode and is no longer actively tested.
+This fork resolves compatibility issues and adds additional functionality.
 
 ---
 
-## 🚀 Overview 2026
+## Added / Fixed in this fork
 
-This integration provides local polling control and diagnostics for TP-Link Deco systems within Home Assistant.
+- ✅ Fix for Home Assistant 2026.4 compatibility
+- ✅ Diagnostic entities (including backhaul speed and max speed)
+- ✅ Polling control:
 
-The project is actively maintained and extended with new features and stability improvements.
+  - pause/resume services
 
----
+- switch entity to control polling from the UI
+- ✅ Improved stability when accessing the Deco web interface
 
-## ✨ Features
-
-### Diagnostics
-- CPU usage (raw + smoothed)
-- Memory usage (raw + smoothed)
-- Backhaul and network diagnostics
-
-### Polling Control
-
-#### Runtime control
-- Pause / resume polling via:
-  - `tplink_deco.pause_polling`
-  - `tplink_deco.resume_polling`
-- Switch entity:
-  - `switch.deco_polling`
-
-#### Polling interval control
-- Adjustable polling interval:
-  - 10 sec
-  - 30 sec (default)
-  - 60 sec
-  - 120 sec
-
-- Configurable:
-  - during setup
-  - via Home Assistant UI (select entity)
-
-#### Benefits
-- Reduces load on the Deco API
-- Prevents session conflicts
-- Improves stability and responsiveness
-- Allows fine-tuning between performance and load
+👉 Use this fork if the original integration no longer works or if you need extended diagnostics and control.
 
 ---
 
-## 📝 Changelog
+## Services / Switch
 
-### v3.7.4
-- Added CPU usage sensors (raw and smoothed)
-- Added memory usage sensors (raw and smoothed)
-- Added configurable polling interval (10 / 30 / 60 / 120 seconds)
-- Added select entity for runtime polling control
-
----
-
-### v3.7.3
-- Fix for Home Assistant 2026.4 compatibility
-- Added diagnostic entities (including backhaul speed and max speed)
-- Added polling control:
-  - pause / resume services
-  - switch entity (`switch.deco_polling`)
-- Improved stability when accessing the Deco web interface
-
----
-
-## 🔧 Services
-
-Available services:
+Available services in Home Assistant:
 
 - `tplink_deco.pause_polling`
 - `tplink_deco.resume_polling`
-- `tplink_deco.reboot_polling`
----
 
-## 🔌 Entities
-
-Polling control:
+Available entity:
 
 - `switch.deco_polling`
-- `select.polling_interval`
 
 ---
 
-## 📦 Installation
+## Polling Control
 
-### HACS
+Pause or resume polling to the Deco API.
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=amosyuen&repository=ha-tplink-deco&category=integration)
+### Benefits
 
-### Manual
+- Reduces load on the Deco API by limiting continuous polling
+- Decreases network traffic and processing overhead
+- Improves debugging by allowing polling to be temporarily disabled
+- Helps prevent issues with limited concurrent sessions in the Deco web interface
+- Provides more control over integration behavior for advanced users
 
-1. Copy `custom_components/tplink_deco` to your Home Assistant config folder
-2. Restart Home Assistant
-3. Add the integration via UI
+This is especially useful when accessing the Deco web interface, as the API allows only a limited number of concurrent sessions.
 
+# TP-Link Deco
+
+[![GitHub Release][releases-shield]][releases]
+[![GitHub Activity][commits-shield]][commits]
+[![License][license-shield]](LICENSE)
+
+[![pre-commit][pre-commit-shield]][pre-commit]
+[![Black][black-shield]][black]
+
+[![hacs][hacsbadge]][hacs]
+[![Project Maintenance][maintenance-shield]][user_profile]
+[![BuyMeCoffee][buymecoffeebadge]][buymecoffee]
+
+[![Community Forum][forum-shield]][forum]
+
+> [!CAUTION]
+> This integration is in MAINTENANCE MODE.
+>
+> I no longer have a deco unit so I cannot test this integration properly. I will not implement any new feature requests and will only implement simple fixes required by Home Assistant.
+>
+> If anybody is interested in taking over this repo and maintaining it, please let me know.
 
 ## Functionality
 
