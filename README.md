@@ -13,11 +13,9 @@
 
 ---
 
-## 🚀 Overview 2026
+## 🚀 Overview
 
 This integration provides local polling control and diagnostics for TP-Link Deco systems within Home Assistant.
-
-The project is actively maintained and extended with new features and stability improvements.
 
 ---
 
@@ -29,35 +27,58 @@ The project is actively maintained and extended with new features and stability 
 - Memory usage (raw + smoothed)
 - Backhaul and network diagnostics
 
+### CPU / Memory sensors
+
+Two types of sensors are available:
+
+- **Raw** → direct values from the Deco (real-time, can fluctuate)
+- **Smoothed** → averaged values over time (stable, ideal for dashboards)
+
+**Use raw for:**
+- debugging
+- real-time monitoring
+
+**Use smoothed for:**
+- dashboards
+- automations
+- trend analysis
+
+---
+
 ### Polling Control
 
 #### Runtime control
 
-- Pause / resume polling via:
+- Pause / resume polling:
   - `tplink_deco.pause_polling`
   - `tplink_deco.resume_polling`
+
 - Switch entity:
   - `switch.deco_polling`
 
+---
+
 #### Polling interval control
 
-- Adjustable polling interval:
+Adjustable polling interval:
 
-  - 10 sec
-  - 30 sec (default)
-  - 60 sec
-  - 120 sec
+- 10 sec
+- 30 sec (default)
+- 60 sec
+- 120 sec
 
-- Configurable:
-  - during setup
-  - via Home Assistant UI (select entity)
+Configurable:
+- during setup
+- via Home Assistant UI (select entity)
+
+---
 
 #### Benefits
 
-- Reduces load on the Deco API
+- Reduces API load
 - Prevents session conflicts
-- Improves stability and responsiveness
-- Allows fine-tuning between performance and load
+- Improves stability
+- Better control over performance
 
 ---
 
@@ -75,30 +96,31 @@ The project is actively maintained and extended with new features and stability 
 ### v3.7.3
 
 - Fix for Home Assistant 2026.4 compatibility
-- Added diagnostic entities (including backhaul speed and max speed)
-- Added polling control:
-  - pause / resume services
-  - switch entity (`switch.deco_polling`)
-- Improved stability when accessing the Deco web interface
+- Added diagnostic entities (backhaul speed, max speed)
+- Added polling control services and switch
+- Improved API stability
 
 ---
 
 ## 🔧 Services
 
-Available services:
-
 - `tplink_deco.pause_polling`
 - `tplink_deco.resume_polling`
-- `tplink_deco.reboot_polling`
+- `tplink_deco.reboot_deco`
 
 ---
 
 ## 🔌 Entities
 
-Polling control:
+### Polling
 
 - `switch.deco_polling`
 - `select.polling_interval`
+
+### Diagnostics
+
+- CPU usage (raw + smoothed)
+- Memory usage (raw + smoothed)
 
 ---
 
